@@ -10,8 +10,9 @@ namespace TuixiuVSTO
             Gongzi gz = new Gongzi();
             Zhenggao zg = new Zhenggao();
 
+
             //tx.tuixiu();
-            zg.zhenggao2018();
+            //zg.zhenggao2018();
 
 
             //gz.genSheets();
@@ -19,6 +20,9 @@ namespace TuixiuVSTO
 
             //Jinxiu jx = new Jinxiu();
             //jx.jinxiu();
+
+            Gongzi2018 gongzi2018 = new Gongzi2018();
+            gongzi2018.genSheets();
 
         }
 

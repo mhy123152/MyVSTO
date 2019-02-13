@@ -25,6 +25,7 @@ namespace TuixiuVSTO.Modules
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<C2018pay> C2018pay { get; set; }
         public virtual DbSet<C2017sum> C2017sum { get; set; }
     }
 }

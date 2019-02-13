@@ -25,7 +25,7 @@ namespace TuixiuVSTO.App
             int incRow = 9;
             int itemPerPage = 3;
             int curRow = 1;
-            string workPath = @"D:\1\2018gz\";
+            string workPath = @"D:\1\";
             string sumFileName = "template.xlsx";
 
             Excel.Application excelApp = new Excel.Application();
@@ -40,20 +40,20 @@ namespace TuixiuVSTO.App
 
             using (var db = new DBModel())
             {
-                var c2017 =
-                    db.C2017sum
-                    .OrderBy(a => a.机构编号)
-                    .ThenByDescending(a => a.年合计收入)
+                var c2018 =
+                    db.C2018pay
+                    .OrderBy(a => a.科室)
+                    .ThenByDescending(a => a.全年收入合计)
                     .ToList();
 
-                int itemCount = c2017.Count;
+                int itemCount = c2018.Count;
                 //int itemCount = 11;
 
-                foreach (var item in c2017)
+                foreach (var item in c2018)
                 //for (int i = 0; i < itemCount; i++)
                 {
                     //var item = c2017[i];
-                    WriteLine($"{item.机构}, {item.姓名}, {item.职工号}, {item.身份证号码}, {item.年合计收入}");
+                    WriteLine($"{item.科室}, {item.姓名}, {item.职工号}, {item.身份证号码}, {item.全年收入合计}");
                     curRow = toSheet2(item, thisWorkSheet, curRow, incRow, itemCount, itemPerPage);
                 }
 
@@ -63,16 +63,16 @@ namespace TuixiuVSTO.App
             thisWorkBook.Close(false);
         }
 
-        public int toSheet2(C2017sum item, Excel.Worksheet thisWorkSheet, int curRow, int incRow, int itemCount, int itemPerPage)
+        public int toSheet2(C2018pay item, Excel.Worksheet thisWorkSheet, int curRow, int incRow, int itemCount, int itemPerPage)
         {
-            thisWorkSheet.Cells[2, 2] = item.机构;
+            thisWorkSheet.Cells[2, 2] = item.科室;
             thisWorkSheet.Cells[3, 2] = item.姓名;
             thisWorkSheet.Cells[3, 4] = item.职工号;
             thisWorkSheet.Cells[4, 2] = item.身份证号码;
-            thisWorkSheet.Cells[7, 1] = item.年合计收入;
-            thisWorkSheet.Cells[7, 2] = item.工资;
-            thisWorkSheet.Cells[7, 3] = item.奖金;
-            thisWorkSheet.Cells[7, 4] = item.奖励性补贴;
+            thisWorkSheet.Cells[7, 1] = item.全年收入合计;
+            thisWorkSheet.Cells[7, 2] = item.工资应发合计;
+            thisWorkSheet.Cells[7, 3] = item.全年奖金合计;
+            thisWorkSheet.Cells[7, 4] = item.年终奖和补加款;
 
             string srcStr = "1:9";
             var srcSheet = thisWorkSheet.Range[srcStr];
@@ -96,30 +96,5 @@ namespace TuixiuVSTO.App
             return curRow;
         }
 
-        public int toSheet(C2017sum item, Excel.Worksheet thisWorkSheet, int curRow, int incRow)
-        {
-            thisWorkSheet.Cells[2, 2] = item.机构;
-            thisWorkSheet.Cells[3, 2] = item.姓名;
-            thisWorkSheet.Cells[3, 4] = item.职工号;
-            thisWorkSheet.Cells[4, 2] = item.身份证号码;
-            thisWorkSheet.Cells[7, 1] = item.年合计收入;
-            thisWorkSheet.Cells[7, 2] = item.工资;
-            thisWorkSheet.Cells[7, 3] = item.奖金;
-            thisWorkSheet.Cells[7, 4] = item.奖励性补贴;
-
-            string srcStr = "1:9";
-            var srcSheet = thisWorkSheet.Range[srcStr];
-
-            curRow = curRow + incRow;
-
-            string dstStr = $"{curRow}:{curRow + incRow - 1}";
-            var dstSheet = thisWorkSheet.Range[dstStr];
-
-            WriteLine($"src:{srcStr}, dst:{dstStr}");
-
-            srcSheet.Copy(dstSheet);
-
-            return curRow;
-        }
     }
 }
