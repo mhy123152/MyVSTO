@@ -91,6 +91,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\Attachment_6.cs" />
     <Compile Include="App\Gongzi2018.cs" />
     <Compile Include="App\Gongzi.cs" />
     <Compile Include="App\Jinxiu.cs" />

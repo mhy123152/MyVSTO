@@ -22,13 +22,14 @@ namespace TuixiuVSTO
             //Gongzi2018 gongzi2018 = new Gongzi2018();
             //gongzi2018.genSheets();
 
-            TuixiuForm txForm = new TuixiuForm();
-            txForm.genForm();
+            //TuixiuForm txForm = new TuixiuForm();
+            //txForm.genForm();
 
             //XuegongLunzhuan xglz = new XuegongLunzhuan();
             //xglz.genForm();
 
-
+            Attachment_6 attachment_6 = new Attachment_6();
+            attachment_6.genForm();
 
         }
 
