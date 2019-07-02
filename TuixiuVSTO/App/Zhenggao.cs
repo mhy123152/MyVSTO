@@ -15,6 +15,7 @@ using TuixiuVSTO.Modules;
 using System.Linq;
 using Microsoft.Office.Interop.Word;
 using TuixiuVSTO.App;
+using System.Globalization;
 
 namespace TuixiuVSTO.App
 {
@@ -23,7 +24,7 @@ namespace TuixiuVSTO.App
         public static string workPath = @"D:\Library\Desktop\1\zhenggao\";
         public static string sumFileName = "正高女职工退休.xlsm";
         public static string templateFileName = "template3.docx";
-        public static int KeyNum = 4;
+        public static int KeyNum = 3;
 
         Excel.Application excelApp;
         Word.Application wordApp;
@@ -121,7 +122,7 @@ namespace TuixiuVSTO.App
                 {
                     foreach (Word.Variable var in doc.Variables)
                     {
-                        WriteLine(var.Name);
+                        //WriteLine(var.Name);
                         var.Value = "";
                     }
 
@@ -139,14 +140,22 @@ namespace TuixiuVSTO.App
                     if (!(dict["Name"] == "" || dict["Name"] == null))
                     {
                         WriteLine("OK");
-                        foreach (String key in dict.Keys)
+                        DateTimeFormatInfo dtFormat = new System.Globalization.DateTimeFormatInfo
                         {
-                            WriteLine($"KEY:{key}, Var:{dict[key]}");
-                            doc.Variables.Add(key, dict[key]);
-                        }
+                            ShortDatePattern = "yyyy-MM-dd"
+                        };
+                        DateTime dt = Convert.ToDateTime(dict["Date1"], dtFormat);
+
+                        doc.Variables.Add("Name", dict["Name"]);
+                        doc.Variables.Add("Year", dt.Year);
+                        doc.Variables.Add("Month", dt.Month);
+                        //doc.Variables.Add("Date", dict["Date2"]);
+                        doc.Variables.Add("Date", " ");
+
+
                         doc.Fields.Update();
 
-                        doc.SaveAs2($@"{PathHeader}{dict["Year"]}{dict["Month"]}{dict["Name"]}.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
+                        doc.SaveAs2($@"{PathHeader}{dt.Year}-{dt.Month}-{dict["Name"]}.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
 
                     }
 

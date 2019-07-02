@@ -1,4 +1,5 @@
-﻿using TuixiuVSTO.App;
+﻿using System;
+using TuixiuVSTO.App;
 
 namespace TuixiuVSTO
 {
@@ -22,8 +23,12 @@ namespace TuixiuVSTO
             //Gongzi2018 gongzi2018 = new Gongzi2018();
             //gongzi2018.genSheets();
 
-            TuixiuForm txForm = new TuixiuForm();
-            txForm.genForm();
+            Hetong hetong = new Hetong();
+            hetong.hetong();
+
+            //TuixiuForm txForm = new TuixiuForm();
+            //txForm.genForm(new int[] { 99, 102 });
+            //txForm.genForm(dateBefore: DateTime.MaxValue, dateAfter: new DateTime(2019,7,1));
 
             //XuegongLunzhuan xglz = new XuegongLunzhuan();
             //xglz.genForm();
