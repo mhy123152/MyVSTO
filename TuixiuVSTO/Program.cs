@@ -23,7 +23,8 @@ namespace TuixiuVSTO
             //gongzi2018.genSheets();
 
             //TuixiuForm txForm = new TuixiuForm();
-            //txForm.genForm();
+            //txForm.genForm(new int[] { 99, 102 });
+            //txForm.genForm(dateBefore: DateTime.MaxValue, dateAfter: new DateTime(2019,7,1));
 
             //XuegongLunzhuan xglz = new XuegongLunzhuan();
             //xglz.genForm();
