@@ -28,8 +28,15 @@ namespace TuixiuVSTO
             //XuegongLunzhuan xglz = new XuegongLunzhuan();
             //xglz.genForm();
 
-            Attachment_6 attachment_6 = new Attachment_6();
-            attachment_6.genForm();
+            //Attachment_6 attachment_6 = new Attachment_6();
+            //attachment_6.genForm();
+
+            //PDFsort pdfsort = new PDFsort();
+            //pdfsort.MergePDF();
+
+            SSForm ssForm = new SSForm();
+            //ssForm.genForm();
+            ssForm.myExcelToPDFConversion();
 
         }
 
