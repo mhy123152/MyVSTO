@@ -166,7 +166,7 @@ namespace TuixiuVSTO.App
                         }
                         doc.Fields.Update();
 
-                        doc.SaveAs2($@"{PathHeader}{dict["num"]}{dict["name"]}.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
+                        doc.SaveAs2($@"{PathHeader}{dict["index"]}-{dict["name"]}-{dict["num"]}.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
 
                     }
 

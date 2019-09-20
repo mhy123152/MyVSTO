@@ -17,6 +17,7 @@ using Microsoft.Office.Interop.Word;
 using TuixiuVSTO.App;
 using Application = System.Windows.Forms.Application;
 using Microsoft.Office.Core;
+using System.Globalization;
 
 namespace TuixiuVSTO.App
 {
@@ -60,8 +61,25 @@ namespace TuixiuVSTO.App
             excelApp.Quit();
         }
 
+        DateTime dtMax = new DateTime(2999, 1, 1);
+        DateTime dtMin = new DateTime(1900, 1, 1);
 
-        public void genForm(int rowNum = 0)
+        public void genForm()
+        {
+            genForm(dtMax, dtMin, new int[] { 0 });
+        }
+
+        public void genForm(int[] rowNums)
+        {
+            genForm(dtMax, dtMin, rowNums);
+        }
+
+        public void genForm(DateTime dateBefore, DateTime dateAfter)
+        {
+            genForm(dateBefore, dateAfter, new int[] { 0 });
+        }
+
+        public void genForm(DateTime dateBefore, DateTime dateAfter, int[] rowNums)
         {
             PathHeader = $@"{workPath}result\";
             PathHeader1 = $@"{workPath}result\有独生子女证\";
@@ -104,16 +122,19 @@ namespace TuixiuVSTO.App
                 string Cadre = "";
                 */
 
-                if (rowNum == 0)
+                if (rowNums[0] == 0)
                 {
                     for (int i = startNum; i <= ranges.Rows.Count; i++)
                     {
-                        doBatch(i);
+                        doBatch(i, dateBefore, dateAfter);
                     }
                 }
                 else
                 {
-                    doBatch(rowNum);
+                    foreach(int rowNum in rowNums)
+                    {
+                        doBatch(rowNum, dtMax, dtMin);
+                    }
                 }
 
             }
@@ -176,12 +197,8 @@ namespace TuixiuVSTO.App
             worksheet = workbook.Worksheets[sheetName];
         }
 
-        private void doBatch(int rowNum)
+        private void doBatch(int rowNum, DateTime dateBefore, DateTime dateAfter)
         {
-
-            openSheet2(workPath + templateFileName, out templateWorkBook, out templateWorkSheet, "审批表正面");
-
-            templateWorkSheet2 = templateWorkBook.Worksheets["审批表背面"];
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
@@ -193,8 +210,25 @@ namespace TuixiuVSTO.App
                 dict.Add(dictKey, dictValue);
             }
 
+            DateTimeFormatInfo dtFormat = new System.Globalization.DateTimeFormatInfo
+            {
+                ShortDatePattern = "yyyy/MM/dd"
+            };
+            DateTime dt = Convert.ToDateTime(dict["退休时间"], dtFormat);
+
+            if (!(dateBefore >= dt && dateAfter <= dt))
+            {
+                WriteLine($"{dict["姓名"]} PASS");
+                return;
+            }
+
+
             if (!(dict["姓名"] == "" || dict["姓名"] == null))
             {
+                openSheet2(workPath + templateFileName, out templateWorkBook, out templateWorkSheet, "审批表正面");
+
+                templateWorkSheet2 = templateWorkBook.Worksheets["审批表背面"];
+
                 /*
                 string PathHeader = $@"{workPath}{dict["Name"]}({dict["Class"]})\";
                 WriteLine(PathHeader);
@@ -210,9 +244,9 @@ namespace TuixiuVSTO.App
 
                 templateWorkSheet.Range["D3"].Value2 = dict["姓名"];
                 templateWorkSheet.Range["K4"].Value2 = dict["2014年9月岗位"];
-                templateWorkSheet.Range["D5"].Value2 = $@"{dict["出生时间"]}-01";
-                templateWorkSheet.Range["K5"].Value2 = $@"{dict["参加工作时间"]}-01";
-                templateWorkSheet.Range["O5"].Value2 = $@"{dict["退休时间"]}-01";
+                templateWorkSheet.Range["D5"].Value2 = dict["出生时间"];
+                templateWorkSheet.Range["K5"].Value2 = dict["参加工作时间"];
+                templateWorkSheet.Range["O5"].Value2 = dict["退休时间"];
                 templateWorkSheet.Range["D6"].Value2 = "荆州市中心医院";
                 templateWorkSheet.Range["O6"].Value2 = dict["工作年限"];
                 templateWorkSheet.Range["D7"].Value2 = dict["身份证号码"];
@@ -230,14 +264,15 @@ namespace TuixiuVSTO.App
 
                 if (dict["是否女干"] == "是")
                 {
-                    fn = $@"【女干】【{dict["档案编号"]}】{dict["姓名"]}";
+                    fn = $@"【女干】【{dict["退休时间"].Substring(0, 7)}】【{dict["档案编号"]}】{dict["姓名"]}";
                 }
                 else
                 {
-                    fn = $@"【正常】【{dict["档案编号"]}】{dict["姓名"]}";
+                    fn = $@"【正常】【{dict["退休时间"].Substring(0, 7)}】【{dict["档案编号"]}】{dict["姓名"]}";
                 }
 
                 string picPath = $@"{workPath}独生子女证\{fn}.png";
+                string picPath2 = $@"{workPath}独生子女证2\{fn}.png";  //伪
 
                 if (File.Exists(picPath))
                 {
@@ -245,7 +280,13 @@ namespace TuixiuVSTO.App
 
                     templateWorkBook.SaveAs(Filename: $@"{PathHeader1}{fn}.xlsx");
                 }
-                else if(File.Exists($@"{workPath}婚育情况证明书\{fn}.png"))
+                else if (File.Exists(picPath2))
+                {
+                    templateWorkSheet2.Shapes.AddPicture(picPath2, MsoTriState.msoFalse, MsoTriState.msoCTrue, 50, 450, -1, -1);
+
+                    templateWorkBook.SaveAs(Filename: $@"{PathHeader1}{fn}.xlsx");
+                }
+                else if (File.Exists($@"{workPath}婚育情况证明书\{fn}.png"))
                 {
                     templateWorkBook.SaveAs(Filename: $@"{PathHeader2}{fn}.xlsx");
                 }
