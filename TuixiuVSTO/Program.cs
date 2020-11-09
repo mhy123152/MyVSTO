@@ -9,6 +9,7 @@ namespace TuixiuVSTO
         {
             //Tuixiu tx = new Tuixiu();
             //tx.tuixiu();
+            //tx.mergeExcelSheet();
 
             //Zhenggao zg = new Zhenggao();
             //zg.zhenggao2018();
@@ -35,10 +36,30 @@ namespace TuixiuVSTO
             //PDFsort pdfsort = new PDFsort();
             //pdfsort.MergePDF();
 
-            SSForm ssForm = new SSForm();
-            //ssForm.genForm();
-            ssForm.myExcelToPDFConversion();
+            //SSForm ssForm = new SSForm();
+            ////ssForm.genForm();
+            //ssForm.myExcelToPDFConversion();
 
+            //zgzm zgzm1 = new zgzm();
+            //zgzm1.run();
+
+            //BianziADD bianzi = new BianziADD();
+            //bianzi.genForm();
+
+            //_ExcelToWord excelToWord = new _ExcelToWord();
+            //excelToWord.genForm();
+
+            //_AddColumnToExcel addColumnToExcel = new _AddColumnToExcel();
+            //addColumnToExcel.run();
+
+            //ShengyuForm shengyuForm = new ShengyuForm();
+            //shengyuForm.genForm();
+
+            //_MergeExcelSheet mergeExcelSheet = new _MergeExcelSheet();
+            //mergeExcelSheet.mergeMultiSheetToOneWorksheet();
+
+            TuixiuFormNew tuixiuFormNew = new TuixiuFormNew();
+            tuixiuFormNew.genForm();
         }
 
     }

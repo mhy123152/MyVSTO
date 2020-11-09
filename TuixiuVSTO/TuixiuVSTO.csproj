@@ -57,15 +57,15 @@
     <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Tools.Excel.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Tools.Word, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Tools.Word.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -107,17 +107,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\Attachment_6.cs" />
+    <Compile Include="App\BianziAdd.cs" />
     <Compile Include="App\Gongzi2018.cs" />
     <Compile Include="App\Gongzi.cs" />
     <Compile Include="App\Jinxiu.cs" />
     <Compile Include="App\Hetong.cs" />
     <Compile Include="App\PDFsort.cs" />
+    <Compile Include="App\ShengyuForm.cs" />
     <Compile Include="App\SSForm.cs" />
+    <Compile Include="App\TuixiuFormNew.cs" />
     <Compile Include="App\TuixiuForm.cs" />
     <Compile Include="App\XuegongLunzhuan.cs" />
+    <Compile Include="App\zgzm.cs" />
     <Compile Include="App\Zhenggao.cs" />
     <Compile Include="App\Tuixiu.cs" />
     <Compile Include="App\Zhuanzhu.cs" />
+    <Compile Include="App\_AddColumnToExcel.cs" />
+    <Compile Include="App\_ExcelToWord.cs" />
+    <Compile Include="App\_MergeExcelSheet.cs" />
     <Compile Include="Modules\C2017sum.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>

@@ -340,7 +340,7 @@ namespace TuixiuVSTO.App
 
         public void mergeExcelSheet()
         {
-            string workPath = @"D:\Library\Desktop\1\merge\";
+            string workPath = @"D:\1\merge\";
             string sumFileName = "sum.xlsx";
 
             Excel.Application excelApp = new Excel.Application();

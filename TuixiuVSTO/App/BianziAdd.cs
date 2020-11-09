@@ -20,21 +20,20 @@ using Microsoft.Office.Core;
 
 namespace TuixiuVSTO.App
 {
-    class Attachment_6
+    class BianziADD : IDisposable
     {
 
-        public static string workPath = @"D:\1\Attachment_6\";
+        public static string workPath = @"D:\1\新增编制\";
 
-        //字段数量
-        public static int keyNum = 21;
+        //字段数量, 注意修改！！！
+        public static int keyNum = 9;
 
         //起始位置, 注意修改！！！
         public static int startNum = 3;
 
         //退休人员信息的文件名
-        public static string sumFileName = "附件6数据.xlsx";
-        public static string dataFileName = "附件6工作经历.xlsx";
-        public static string templateFileName = "附件6模板.docx";
+        public static string sumFileName = "新增编制数据.xlsx";
+        public static string templateFileName = "新增编制招聘模板.docx";
 
         Excel.Application excelApp;
         Word.Application wordApp;
@@ -42,16 +41,13 @@ namespace TuixiuVSTO.App
         Excel.Workbook thisWorkBook;
         Excel.Worksheet thisWorkSheet;
 
-        Excel.Workbook dataWorkBook;
-        Excel.Worksheet dataWorkSheet;
-
         Word.Document templateDocument;
 
         Excel.Range ranges;
 
         string PathHeader;
 
-        public Attachment_6()
+        public BianziADD()
         {
             excelApp = new Excel.Application();
             wordApp = new Word.Application();
@@ -81,7 +77,6 @@ namespace TuixiuVSTO.App
             }
 
             openSheet2(workPath + sumFileName, out thisWorkBook, out thisWorkSheet, "Sheet1");
-            openSheet2(workPath + dataFileName, out dataWorkBook, out dataWorkSheet, "Sheet1");
 
             try
             {
@@ -166,11 +161,9 @@ namespace TuixiuVSTO.App
                 {
                     /*
                     不填写以下数据：
-                    tx_class, 根据情况打钩或不打钩
-                    nurse，根据情况打钩或不打钩，并且填写护龄
-                    pay_age, 弃用附件6数据中的缴费月数，根据工作经历来重新计算合计缴费月数
+                    class_zj;class_gq, 根据情况打钩或不打钩
                     */
-                    if (key == "tx_class" || key == "nurse" || key == "pay_age")
+                    if (key == "class_zj" || key == "class_gq")
                     {
                         //Pass
                     }
@@ -180,90 +173,17 @@ namespace TuixiuVSTO.App
                     }
                 }
 
-                if (dict["tx_class"] == "正常退休")
+                if (dict["class"] == "专技")
                 {
-                    templateDocument.Variables.Add("tx_class", "☑");
+                    templateDocument.Variables.Add("class_zj", "☑");
+                    templateDocument.Variables.Add("class_gq", "□");
                 }
-                else
+                else if(dict["class"] == "工勤")
                 {
-                    templateDocument.Variables.Add("tx_class", "□");
+                    templateDocument.Variables.Add("class_gq", "☑");
+                    templateDocument.Variables.Add("class_zj", "□");
                 }
-
-                //根据岗位类型填写
-                switch (dict["work_class"])
-                {
-                    case "事业管理":
-                        templateDocument.Variables.Add("work_level_1", dict["work_level"]);
-                        templateDocument.Variables.Add("work_paylevel_1", dict["work_paylevel"]);
-                        templateDocument.Variables.Add("tx_level_1", dict["tx_level"]);
-                        templateDocument.Variables.Add("tx_paylevel_1", dict["tx_paylevel"]);
-                        break;
-                    case "事业专技":
-                        templateDocument.Variables.Add("work_level_2", dict["work_level"]);
-                        templateDocument.Variables.Add("work_paylevel_2", dict["work_paylevel"]);
-                        templateDocument.Variables.Add("tx_level_2", dict["tx_level"]);
-                        templateDocument.Variables.Add("tx_paylevel_2", dict["tx_paylevel"]);
-                        break;
-                    case "事业工勤":
-                        templateDocument.Variables.Add("work_level_3", dict["work_level"]);
-                        templateDocument.Variables.Add("work_paylevel_3", dict["work_paylevel"]);
-                        templateDocument.Variables.Add("tx_level_3", dict["tx_level"]);
-                        templateDocument.Variables.Add("tx_paylevel_3", dict["tx_paylevel"]);
-                        break;
-                }
-
-                //护士相关
-                if (dict["nurse"] == "是")
-                {
-                    templateDocument.Variables.Add("nurse", "☑");
-                    templateDocument.Variables.Add("nurse_age_2", $"{int.Parse(dict["nurse_age"]) / 12}年 {int.Parse(dict["nurse_age"]) % 12}个月");
-                }
-                else
-                {
-                    templateDocument.Variables.Add("nurse", "□");
-                }
-
-                #region 填写工作经历
-
-                Excel.Range dataRange = dataWorkSheet.UsedRange;
-
-                WriteLine($"------------------------------------------------------------------");
-
-                int dataRowNum = 0;
-                int pay_age = 0;
-
-                for (int i = 2; i <= dataRange.Rows.Count; i++)
-                {
-                    if (dataRange.Cells[i, 2].Text == dict["id"])
-                    {
-                        Write($"DataRange:");
-                        Write($"{dataRange.Cells[i, 4].Text}, ");
-                        Write($"{dataRange.Cells[i, 6].Text}, ");
-                        Write($"{dataRange.Cells[i, 7].Text}, ");
-                        Write($"{dataRange.Cells[i, 8].Text}, ");
-                        Write($"{dataRange.Cells[i, 9].Text}, ");
-                        Write($"{dataRange.Cells[i, 10].Text}, ");
-                        WriteLine("");
-
-                        dataRowNum++;
-
-                        for (int j = 1; j <= 5; j++)
-                        {
-                            templateDocument.Variables.Add($"r{dataRowNum}c{j}", dataRange.Cells[i, 5+j].Text);
-                        }
-
-                        //根据工作经历来计算合计缴费月数
-                        pay_age += int.Parse(dataRange.Cells[i, 10].Text);
-
-                    }
-                }
-
-                WriteLine($"------------------------------------------------------------------");
-
-                templateDocument.Variables.Add("pay_age", pay_age);
-
-                #endregion
-
+                                
 
                 //更新变量
                 templateDocument.Fields.Update();
@@ -285,7 +205,7 @@ namespace TuixiuVSTO.App
 
                 #endregion
 
-                templateDocument.SaveAs2($@"{PathHeader}【{dict["profile_id"]}】【{dict["name"]}】附件6.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
+                templateDocument.SaveAs2($@"{PathHeader}【{dict["id"]}】【{dict["name"]}】招聘登记表.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
 
                 templateDocument.Close(SaveChanges: false);
 
