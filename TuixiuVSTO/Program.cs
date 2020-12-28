@@ -58,8 +58,20 @@ namespace TuixiuVSTO
             //_MergeExcelSheet mergeExcelSheet = new _MergeExcelSheet();
             //mergeExcelSheet.mergeMultiSheetToOneWorksheet();
 
-            TuixiuFormNew tuixiuFormNew = new TuixiuFormNew();
-            tuixiuFormNew.genForm();
+            //TuixiuFormNew tuixiuFormNew = new TuixiuFormNew();
+            //tuixiuFormNew.genForm();
+
+            //GangweiForm gangweiForm = new GangweiForm();
+            //gangweiForm.genForm();
+
+            //SSForm500 sSForm500 = new SSForm500();
+            //sSForm500.genForm();
+
+            //SSDataFromSumForm sSDataFromSumForm = new SSDataFromSumForm();
+            //sSDataFromSumForm.genForm();
+
+            SSFormENT sSFormENT = new SSFormENT();
+            sSFormENT.genForm();
         }
 
     }

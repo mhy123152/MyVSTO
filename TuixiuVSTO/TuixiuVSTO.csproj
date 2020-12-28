@@ -108,12 +108,17 @@
   <ItemGroup>
     <Compile Include="App\Attachment_6.cs" />
     <Compile Include="App\BianziAdd.cs" />
+    <Compile Include="App\GangweiForm.cs" />
+    <Compile Include="App\GangweiFormFromSSForm.cs" />
     <Compile Include="App\Gongzi2018.cs" />
     <Compile Include="App\Gongzi.cs" />
     <Compile Include="App\Jinxiu.cs" />
     <Compile Include="App\Hetong.cs" />
     <Compile Include="App\PDFsort.cs" />
     <Compile Include="App\ShengyuForm.cs" />
+    <Compile Include="App\SSDataFromSumForm.cs" />
+    <Compile Include="App\SSFormENT.cs" />
+    <Compile Include="App\SSForm500.cs" />
     <Compile Include="App\SSForm.cs" />
     <Compile Include="App\TuixiuFormNew.cs" />
     <Compile Include="App\TuixiuForm.cs" />
