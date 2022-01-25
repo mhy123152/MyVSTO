@@ -25,9 +25,6 @@ namespace TuixiuVSTO.App
 
         public static string workPath = @"D:\1\Attachment_6\";
 
-        //字段数量
-        public static int keyNum = 21;
-
         //起始位置, 注意修改！！！
         public static int startNum = 3;
 
@@ -60,8 +57,10 @@ namespace TuixiuVSTO.App
         public void Dispose()
         {
             thisWorkBook.Close(false);
+            dataWorkBook.Close(false);
             templateDocument.Close(false);
             excelApp.Quit();
+            wordApp.Quit();
         }
 
 
@@ -103,6 +102,7 @@ namespace TuixiuVSTO.App
             finally
             {
                 thisWorkBook.Close(false);
+                dataWorkBook.Close(false);
                 excelApp.Quit();
                 wordApp.Quit();
             }
@@ -139,7 +139,7 @@ namespace TuixiuVSTO.App
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
-            for (int j = 1; j <= keyNum; j++)
+            for (int j = 1; j <= ranges.Columns.Count; j++)
             {
                 string dictKey = ranges.Cells[2, j].Text;
                 string dictValue = ranges.Cells[rowNum, j].Text;
@@ -166,11 +166,10 @@ namespace TuixiuVSTO.App
                 {
                     /*
                     不填写以下数据：
-                    tx_class, 根据情况打钩或不打钩
-                    nurse，根据情况打钩或不打钩，并且填写护龄
+                    nurse，根据情况填写是否护士
                     pay_age, 弃用附件6数据中的缴费月数，根据工作经历来重新计算合计缴费月数
                     */
-                    if (key == "tx_class" || key == "nurse" || key == "pay_age")
+                    if (key == "nurse" || key == "pay_age")
                     {
                         //Pass
                     }
@@ -180,14 +179,14 @@ namespace TuixiuVSTO.App
                     }
                 }
 
-                if (dict["tx_class"] == "正常退休")
-                {
-                    templateDocument.Variables.Add("tx_class", "☑");
-                }
-                else
-                {
-                    templateDocument.Variables.Add("tx_class", "□");
-                }
+                //if (dict["tx_class"] == "正常退休")
+                //{
+                //    templateDocument.Variables.Add("tx_class", "☑");
+                //}
+                //else
+                //{
+                //    templateDocument.Variables.Add("tx_class", "□");
+                //}
 
                 //根据岗位类型填写
                 switch (dict["work_class"])
@@ -212,16 +211,43 @@ namespace TuixiuVSTO.App
                         break;
                 }
 
-                //护士相关
-                if (dict["nurse"] == "是")
+                //护士
+                if (!(dict["nurse"] == "" || dict["nurse"] == null))
                 {
-                    templateDocument.Variables.Add("nurse", "☑");
-                    templateDocument.Variables.Add("nurse_age_2", $"{int.Parse(dict["nurse_age"]) / 12}年 {int.Parse(dict["nurse_age"]) % 12}个月");
+                    templateDocument.Variables.Add("nurse_age", "护龄满20年以上");
+                    //templateDocument.Variables.Add("nurse_age_2", $"{int.Parse(dict["nurse_age"]) / 12}年 {int.Parse(dict["nurse_age"]) % 12}个月");
                 }
-                else
+
+                //职务升降
+                if (!(dict["post_change_date"] == "" || dict["post_change_date"] == null))
                 {
-                    templateDocument.Variables.Add("nurse", "□");
+                    templateDocument.Variables.Add("post_change", "是");
+
+                    if (!(dict["nurse"] == "" || dict["nurse"] == null))
+                    {
+                        templateDocument.Variables.Add("last_nurse_age", "护龄满20年以上");
+                    }
+
+                    //职务升降时，岗位为退休时岗位，薪级为2014年9月薪级
+                    switch (dict["work_class"])
+                    {
+                        case "事业管理":
+                            templateDocument.Variables.Add("last_work_level_1", dict["tx_level"]);
+                            templateDocument.Variables.Add("last_work_paylevel_1", dict["work_paylevel"]);
+                            break;
+                        case "事业专技":
+                            templateDocument.Variables.Add("last_work_level_2", dict["tx_level"]);
+                            templateDocument.Variables.Add("last_work_paylevel_2", dict["work_paylevel"]);
+                            break;
+                        case "事业工勤":
+                            templateDocument.Variables.Add("last_work_level_3", dict["tx_level"]);
+                            templateDocument.Variables.Add("last_work_paylevel_3", dict["work_paylevel"]);
+                            break;
+                    }
                 }
+
+
+
 
                 #region 填写工作经历
 
@@ -234,26 +260,26 @@ namespace TuixiuVSTO.App
 
                 for (int i = 2; i <= dataRange.Rows.Count; i++)
                 {
-                    if (dataRange.Cells[i, 2].Text == dict["id"])
+                    if (dataRange.Cells[i, 1].Text == dict["name"])
                     {
                         Write($"DataRange:");
+                        Write($"{dataRange.Cells[i, 2].Text}, ");
+                        Write($"{dataRange.Cells[i, 3].Text}, ");
                         Write($"{dataRange.Cells[i, 4].Text}, ");
+                        Write($"{dataRange.Cells[i, 5].Text}, ");
                         Write($"{dataRange.Cells[i, 6].Text}, ");
                         Write($"{dataRange.Cells[i, 7].Text}, ");
-                        Write($"{dataRange.Cells[i, 8].Text}, ");
-                        Write($"{dataRange.Cells[i, 9].Text}, ");
-                        Write($"{dataRange.Cells[i, 10].Text}, ");
                         WriteLine("");
 
                         dataRowNum++;
 
                         for (int j = 1; j <= 5; j++)
                         {
-                            templateDocument.Variables.Add($"r{dataRowNum}c{j}", dataRange.Cells[i, 5+j].Text);
+                            templateDocument.Variables.Add($"r{dataRowNum}c{j}", dataRange.Cells[i, 1 + j].Text);
                         }
 
                         //根据工作经历来计算合计缴费月数
-                        pay_age += int.Parse(dataRange.Cells[i, 10].Text);
+                        pay_age += int.Parse(dataRange.Cells[i, 6].Text);
 
                     }
                 }
@@ -285,7 +311,7 @@ namespace TuixiuVSTO.App
 
                 #endregion
 
-                templateDocument.SaveAs2($@"{PathHeader}【{dict["profile_id"]}】【{dict["name"]}】附件6.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
+                templateDocument.SaveAs2($@"{PathHeader}【{dict["tx_date"]}】【{dict["name"]}】附件6.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
 
                 templateDocument.Close(SaveChanges: false);
 

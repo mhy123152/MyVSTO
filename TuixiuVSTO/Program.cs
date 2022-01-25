@@ -60,6 +60,10 @@ namespace TuixiuVSTO
 
             //TuixiuFormNew tuixiuFormNew = new TuixiuFormNew();
             //tuixiuFormNew.genForm();
+            //tuixiuFormNew.genForm(new int[] { 11, 12, 13});
+
+            TuixiuNew tuixiuNew = new TuixiuNew();
+            tuixiuNew.tuixiu();
 
             //GangweiForm gangweiForm = new GangweiForm();
             //gangweiForm.genForm();
@@ -70,8 +74,8 @@ namespace TuixiuVSTO
             //SSDataFromSumForm sSDataFromSumForm = new SSDataFromSumForm();
             //sSDataFromSumForm.genForm();
 
-            SSFormENT sSFormENT = new SSFormENT();
-            sSFormENT.genForm();
+            //SSFormENT sSFormENT = new SSFormENT();
+            //sSFormENT.genForm();
         }
 
     }

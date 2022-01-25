@@ -122,6 +122,7 @@
     <Compile Include="App\SSForm.cs" />
     <Compile Include="App\TuixiuFormNew.cs" />
     <Compile Include="App\TuixiuForm.cs" />
+    <Compile Include="App\TuixiuNew.cs" />
     <Compile Include="App\XuegongLunzhuan.cs" />
     <Compile Include="App\zgzm.cs" />
     <Compile Include="App\Zhenggao.cs" />

@@ -23,9 +23,9 @@ namespace TuixiuVSTO.App
     class _ExcelToWord : IDisposable
     {
         #region 需要修改的变量
-        public static string resultFileName = "绿色通道推荐表";
-        public static string sumFileName = "新增编制数据.xlsx";
-        public static string templateFileName = "绿色通道模板.docx";
+        public static string resultFileName = "解除劳动合同";
+        public static string sumFileName = "data.xlsx";
+        public static string templateFileName = "解除劳动合同.docx";
         #endregion
 
         #region 固定变量
@@ -187,7 +187,8 @@ namespace TuixiuVSTO.App
 
                 #endregion
 
-                templateDocument.SaveAs2($@"{PathHeader}【{string.Format("{0:d3}", dict["id"])}】{resultFileName}.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
+                //templateDocument.SaveAs2($@"{PathHeader}【{string.Format("{0:d3}", dict["id"])}】{resultFileName}.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
+                templateDocument.SaveAs2($@"{PathHeader}【{dict["name"]}】{resultFileName}.docx", FileFormat: Word.WdSaveFormat.wdFormatXMLDocument, LockComments: false, CompatibilityMode: 15);
 
                 templateDocument.Close(SaveChanges: false);
 

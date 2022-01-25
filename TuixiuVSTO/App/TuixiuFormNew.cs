@@ -23,10 +23,10 @@ namespace TuixiuVSTO.App
 {
     class TuixiuFormNew : IDisposable
     {
-        public static string workPath = @"D:\1\tuixiuformNew\";
+        public static string workPath = @"C:\Users\Michael\OneDrive\0Working\退休和辞职\tuixiuformNew\";
 
-        //字段数量
-        public static int keyNum = 30;
+        //落款时间
+        public static string signingDate = "2022 年 1 月 17 日";
 
         //起始位置, 注意修改！！！
         public static int startNum = 2;
@@ -205,7 +205,7 @@ namespace TuixiuVSTO.App
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
-            for (int j = 1; j <= keyNum; j++)
+            for (int j = 1; j <= ranges.Columns.Count; j++)
             {
                 string dictKey = ranges.Cells[1, j].Text;
                 string dictValue = ranges.Cells[rowNum, j].Text;
@@ -260,6 +260,9 @@ namespace TuixiuVSTO.App
                 templateWorkSheet.Range["G12"].Value2 = dict["退休时岗位"];
                 templateWorkSheet.Range["G13"].Value2 = dict["退休时薪级"];
                 templateWorkSheet.Range["H15"].Value2 = "5";
+
+                templateWorkSheet.Range["F25"].Value2 = signingDate;
+                templateWorkSheet.Range["N25"].Value2 = $"    {signingDate}";
 
                 #endregion
 
